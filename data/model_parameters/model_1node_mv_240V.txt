@@ -1,0 +1,11 @@
+{'x_ref_low_f':120.0,
+'x_ref_high_f':150.0,
+'u_max':4500.0,
+'u_min':0.0,
+'T_in_f':68.0,
+'T_amb_f':70.0,
+'vol_1node':0.1555,
+'U_1node': 1.2666,
+'rho':1.0e3,
+'cp':4181.3,
+'integrator':'euler'}
