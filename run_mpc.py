@@ -11,7 +11,6 @@ import time
 import matplotlib
 import ast
 from casadi import *
-#sys.path.append('/Users/lilybuechler/Documents/stanford/research/water_heater_controls/sdf_control/util')
 import multinode_sim
 import mpc
 #import thermostat
@@ -29,12 +28,12 @@ horizon_hr=24 #MPC optimization horizon [hrs]
 mpc_T=horizon_hr*3600 #MPC optimization horizon [seconds]
 mpc_M=2 #[integraton steps per control step]
 
-model_type='1nodemv' #MPC formulation [1nodemv or 3nodemv]
+model_type='1nodemv' #MPC formulation ['1nodemv' or '3nodemv']
 ritchie_num=42 #Home number from ritchie draw data. Homes used in paper include: 0,18,20,37,42,67,63,72
 flow_type='ritchie_'+str(int(ritchie_num))
-sensor_config='5avg' #Sensor configuration [[1low, 2avg, 5avg] for 1nodemv [3act, 6avg] for 3nodemv]
-forecast_type='hist_avg_fest' #Draw forecasting appraoch ['perfect','hist_avg','hist_quantile','hist_avg_fest','hist_quantile_fest']
-save_fig=True #Turn figure saving on/off
+sensor_config='5avg' #Sensor configuration [['1low', '2avg', '5avg'] for '1nodemv', ['3act', '6avg'] for '3nodemv']
+forecast_type='hist_avg_fest' #Draw forecasting approach ['perfect','hist_avg','hist_quantile','hist_avg_fest','hist_quantile_fest']
+save_fig=False #Turn figure saving on/off
 n_samp=28 #Length of lagging dataset for generating draw forecasts
 quant=0.9 #quantile for quantile-based draw forecasts
 cost_name='TPDP' #Electricity cost profile ['elec' for PG&E TOU, 'TPDP' for CalFlexHub dynamic rate]
@@ -182,12 +181,12 @@ sensor_ind=np.digitize(sensor_heights,sensor_bins)-1 #nodes that actual sensor l
 element_height_top=wh_params['element_height_top_in']/39.37 #Height of upper element
 element_height_bot=wh_params['element_height_bot_in']/39.37 #Height of lower element
 
-r=wh_params['r_in']/39.37 #[m]
-dx=h/wh_params['M'] #[m]
+r=wh_params['r_in']/39.37 #[m] tank radius
+dx=h/wh_params['M'] #[m] node height
 A_surf=dx*np.pi*r*2 #[m^2] surface area
-slug_cross_area=np.pi*(r**2)
+slug_cross_area=np.pi*(r**2) #cross sectional area
 slug_vol=dx*slug_cross_area #[m^3] node volume
-cap=slug_vol*wh_params['cp']*wh_params['rho']
+cap=slug_vol*wh_params['cp']*wh_params['rho'] #thermal capacitance
 
 #temperature array for simulation
 temp_sim_k = np.zeros((int(T/sim_dt),wh_params['M']))
@@ -238,11 +237,11 @@ flowrate_mixed=np.zeros((int(T/sim_dt),)) #Array for logging mixed flow rate
 q_array_total_actual=np.zeros((int(T/sim_dt),)) #Array for logging actual draw power values
 
 #setup MPC formulation
-if '1nodemv'==model_type:
+if '1nodemv'==model_type: #one-node MPC formulation
     solver,solver_def=mpc.setup_1node_mv(mpc_M,N,mpc_T,f_model_params,model_dir)
     init_bool=False
     prev_sol={}
-elif ('3nodemv'==model_type) or ('3nodemvlf'==model_type):
+elif ('3nodemv'==model_type): #three-node MPC formulation
     if model_type=='3nodemv':
         solver,solver_def=mpc.setup_3node_mv(mpc_M,N,mpc_T,f_model_params,model_dir)
     init_bool=False
@@ -432,7 +431,7 @@ for i in range(int(T / mpc_dt)):
     Q_array_cl[int(i * mpc_dt/sim_dt):int((i + 1) * mpc_dt/sim_dt), 0] = Q_l_kx
     Q_array_cl[int(i * mpc_dt/sim_dt):int((i + 1) * mpc_dt/sim_dt), 1] = Q_h_kx
 
-    #log simulation outputs from PDE function
+    #log simulation outputs from multimode simulation function
     if i==int(T/mpc_dt)-1:
         temp_sim_k[int(i * mpc_dt/sim_dt):int((i + 1) * mpc_dt/sim_dt), :] = temp_sim_kx[0:int(mpc_dt/sim_dt),:]
         flowrate_mod[int(i * mpc_dt/sim_dt):int((i + 1) * mpc_dt/sim_dt)] = flowrate_mod_kx[0:int(mpc_dt/sim_dt)]
@@ -451,7 +450,7 @@ for i in range(int(T / mpc_dt)):
         T0_f_last=T0_f
         T0_k_last = (T0_f_last - 32.0) * (5.0 / 9.0) + 273.15
         Q_l_last=Q_l
-    if (model_type=='3nodemv') or (model_type=='3nodemvlf'):
+    if (model_type=='3nodemv'):
         T0_l_f_last=T0_l_f
         T0_m_f_last=T0_m_f
         T0_h_f_last=T0_h_f

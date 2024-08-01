@@ -24,7 +24,7 @@ mpc_dt=30 #frequency of thermostat controls [s]
 sim_dt=10 #multinode simulation timestep [s]
 ritchie_num=72 #house in ritchie flow dataset. Homes used in paper include: 0,18,20,37,42,67,63,72
 flow_type='ritchie_'+str(int(ritchie_num))
-save_fig=True #Turn figure saving on/off
+save_fig=False #Turn figure saving on/off
 cost_name='TPDP' #Electricity cost profile ['elec' for PG&E TOU, 'TPDP' for CalFlexHub dynamic rate]
 f_multinode_params='multinode.txt'
 
@@ -144,13 +144,12 @@ sensor_ind=np.digitize(sensor_heights,sensor_bins)-1 #nodes that actual sensor l
 element_height_top=wh_params['element_height_top_in']/39.37 #Height of upper element
 element_height_bot=wh_params['element_height_bot_in']/39.37 #Height of lower element
 
-#r=9.0/39.37#9.0/39.37 #[m] tank radius
-r=wh_params['r_in']/39.37 #[m]
-dx=h/wh_params['M'] #[m]
+r=wh_params['r_in']/39.37 #[m] tank radius
+dx=h/wh_params['M'] #[m] node height
 A_surf=dx*np.pi*r*2 #[m^2] surface area
 slug_cross_area=np.pi*(r**2) # cross sectional area
 slug_vol=dx*slug_cross_area #[m^3] node volume
-cap=slug_vol*wh_params['cp']*wh_params['rho']
+cap=slug_vol*wh_params['cp']*wh_params['rho'] #node thermal capacitance
 
 #initial profile (starting around 120 deg F for most of tank)
 temp_sim_k = np.zeros((int(T/sim_dt),wh_params['M']))
@@ -178,7 +177,7 @@ M=wh_params['M']
 #################    Target draw power profile     ##################
 ######################################################################
 
-#actual target draw power trajectories
+#target draw power trajectories
 q_array_total=f_array_total*wh_params['rho']*wh_params['cp']*(mv_set_k-T_in)
 data_full_10min['q_draw']=data_full_10min.m3s*wh_params['rho']*wh_params['cp']*(mv_set_k-T_in)
 
