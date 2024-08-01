@@ -30,7 +30,7 @@ mpc_T=horizon_hr*3600 #MPC optimization horizon [seconds]
 mpc_M=2 #[integraton steps per control step]
 
 model_type='1nodemv' #MPC formulation [1nodemv or 3nodemv]
-ritchie_num=42 #Home number from ritchie draw data
+ritchie_num=42 #Home number from ritchie draw data. Homes used in paper include: 0,18,20,37,42,67,63,72
 flow_type='ritchie_'+str(int(ritchie_num))
 sensor_config='5avg' #Sensor configuration [[1low, 2avg, 5avg] for 1nodemv [3act, 6avg] for 3nodemv]
 forecast_type='hist_avg_fest' #Draw forecasting appraoch ['perfect','hist_avg','hist_quantile','hist_avg_fest','hist_quantile_fest']
