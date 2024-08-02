@@ -2,7 +2,7 @@
 
 Code to accompany the submitted paper:
 
-Elizabeth Buechler, Aaron Goldin, and Ram Rajagopal. "Designing MPC Strategies for Grid-Interactive Water Heaters for Load Shifting Applications" (Submitted 2024).
+Elizabeth Buechler, Aaron Goldin, and Ram Rajagopal. "Designing model predictive control strategies for grid-interactive water heaters for load shifting applications" (Submitted 2024).
 
 
 #### Running the code:
