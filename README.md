@@ -1,8 +1,8 @@
 ## Water Heater MPC
 
-Code to accompany the submitted paper:
+Code to accompany the following paper:
 
-Elizabeth Buechler, Aaron Goldin, and Ram Rajagopal. "Designing model predictive control strategies for grid-interactive water heaters for load shifting applications" Applied Energy. [Paper here](https://authors.elsevier.com/a/1kMMg15eifC9Fx)
+Elizabeth Buechler, Aaron Goldin, and Ram Rajagopal. "Designing model predictive control strategies for grid-interactive water heaters for load shifting applications" Applied Energy. (2025) [Paper here](https://authors.elsevier.com/a/1kMMg15eifC9Fx)
 
 
 #### Running the code:
