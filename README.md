@@ -7,7 +7,7 @@ Elizabeth Buechler, Aaron Goldin, and Ram Rajagopal. "Designing model predictive
 
 #### Running the code:
 
-* Run `run_mpc.py` to test the MPC controllers. This requires the CasADi package which utilizes the IPOPT solver. This work was developed using CasADi version 3.6.3 and python version 3.11.
+* Run `run_mpc.py` to test the MPC controllers. This requires the CasADi package which utilizes the IPOPT solver. This work was developed using CasADi version 3.6.3 and python version 3.11. See the paper for more information about the controller hyperparameters, simulaton parameters, and model definition.
 * Run `run_thermostat.py` to test the baseline thermostatic controller with no load shifting.
 
 #### Folders:
